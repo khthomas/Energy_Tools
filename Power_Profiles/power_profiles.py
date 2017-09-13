@@ -15,6 +15,8 @@ Right now this tool can:
 To Do:
     1. Make the combined plot funciton take only certain months
     2. Find a way to include title, xlabel, and ylabel
+    3. Update daily function to plot the day by day power consumption (for historical analysis)
+    4. incorporate proper datetime?
 """
 
 import pandas as pd
