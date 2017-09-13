@@ -13,8 +13,8 @@ Right now this tool can:
     4. Combine all of the plots into one yearly plot
 
 To Do:
-    1. Make the combined plot funciton take only certain months
-    2. Find a way to include title, xlabel, and ylabel
+    1. Make the combined plot funciton take only certain months: Done
+    2. Find a way to include title, xlabel, and ylabel: Done
     3. Update daily function to plot the day by day power consumption (for historical analysis)
     4. incorporate proper datetime?
     5. Clean file to remove uneeded test code
@@ -62,18 +62,32 @@ class monthly_2D_plots:
     def __init__(self):
         self.kwData = pd.DataFrame()
         self.jan_plot = plt.plot()
-        self.feb_plot = p.figure(figsize=(10,10))
-        self.mar_plot = p.figure(figsize=(10,10))
-        self.apr_plot = p.figure(figsize=(10,10))
-        self.may_plot = p.figure(figsize=(10,10))
-        self.jun_plot = p.figure(figsize=(10,10))
-        self.jul_plot = p.figure(figsize=(10,10))
-        self.aug_plot = p.figure(figsize=(10,10))
-        self.sep_plot = p.figure(figsize=(10,10))
-        self.octb_plot = p.figure(figsize=(10,10))
-        self.nov_plot = p.figure(figsize=(10,10))
-        self.dec_plot = p.figure(figsize=(10,10))
+        self.feb_plot = plt.plot()
+        self.mar_plot = plt.plot()
+        self.apr_plot = plt.plot()
+        self.may_plot = plt.plot()
+        self.jun_plot = plt.plot()
+        self.jul_plot = plt.plot()
+        self.aug_plot = plt.plot()
+        self.sep_plot = plt.plot()
+        self.octb_plot = plt.plot()
+        self.nov_plot = plt.plot()
+        self.dec_plot = plt.plot()
         self.combPlot = plt.plot()
+        self.mDict = {
+        "1": self.jan_plot,
+        "2": self.feb_plot,
+        "3": self.mar_plot,
+        "4": self.apr_plot,
+        "5": self.may_plot,
+        "6": self.jun_plot,
+        "7": self.jul_plot,
+        "8": self.aug_plot,
+        "9": self.sep_plot,
+        "10": self.octb_plot,
+        "11": self.nov_plot,
+        "12": self.dec_plot
+        }
         
     def get_kw_data(self):
         file = input("\n\n Paste name of yearly kW data (expecting 1 reading per hour) \n")
@@ -100,7 +114,7 @@ class monthly_2D_plots:
         nov = range(octb[-1], (octb[-1] + 24 * 30) + 1)
         dec = range(nov[-1], (nov[-1] + 24 * 31) + 1)
         
-        months = [jan, feb, mar, apr, may, jun, jul, aug, sep, octb, nov, dec]
+        #months = [jan, feb, mar, apr, may, jun, jul, aug, sep, octb, nov, dec]
         
                 
     def monthly_analysis_avg_profile(self):
@@ -117,10 +131,11 @@ class monthly_2D_plots:
         nov = range(octb[-1], (octb[-1] + 24 * 30) + 1)
         dec = range(nov[-1], (nov[-1] + 24 * 31) + 1)
         
+
         months = [jan, feb, mar, apr, may, jun, jul, aug, sep, octb, nov, dec]
-        mplots = [self.jan_plot, self.feb_plot, self.mar_plot, self.apr_plot, 
-                 self.may_plot, self.jun_plot, self.jul_plot, self.aug_plot,
-                 self.sep_plot, self.octb_plot, self.nov_plot, self.dec_plot]
+#        mplots = [self.jan_plot, self.feb_plot, self.mar_plot, self.apr_plot, 
+#                 self.may_plot, self.jun_plot, self.jul_plot, self.aug_plot,
+#                 self.sep_plot, self.octb_plot, self.nov_plot, self.dec_plot]
         
         for month in months:
             outcome = []
@@ -153,10 +168,25 @@ class monthly_2D_plots:
                 self.dec_plot = outcome
             
     def combine_monthly_plots(self):
-        response = input("""What months do you want to plot on the same graph? \n
-                         Input months by their number (ex: January = 1) \n
-                         You can enter multiple numbers seperated by spaces (1 2 3) \n
-                         To get all plots enter ALL\n""")
+        response = input("""What months do you want to plot on the same graph? \n 
+Input months by their number (ex: January = 1) \n 
+You can enter multiple numbers seperated by spaces (1 2 3) \n
+To get all plots enter ALL\n""")
+        
+        mDict = {
+        "1": self.jan_plot,
+        "2": self.feb_plot,
+        "3": self.mar_plot,
+        "4": self.apr_plot,
+        "5": self.may_plot,
+        "6": self.jun_plot,
+        "7": self.jul_plot,
+        "8": self.aug_plot,
+        "9": self.sep_plot,
+        "10": self.octb_plot,
+        "11": self.nov_plot,
+        "12": self.dec_plot
+        }
         
         if response.lower() == "all":
             self.combPlot = plt.plot(self.jan_plot)
@@ -171,6 +201,13 @@ class monthly_2D_plots:
             self.combPlot = plt.plot(self.octb_plot)
             self.combPlot = plt.plot(self.nov_plot)
             self.combPlot = plt.plot(self.dec_plot)
+        
+        if response.lower() != "all":
+            for x in response.split():
+                self.combPlot = plt.plot(mDict[str(x)])
+                self.combPlot = plt.xlabel("Hour of Day")
+                self.combPlot = plt.ylabel("Power (kW)")
+            
             
     def plot_month(self, x):
         mDict = {
@@ -187,38 +224,76 @@ class monthly_2D_plots:
                 "11": self.nov_plot,
                 "12": self.dec_plot
                 }
-        plt.plot(mDict[str(x)], xlabel="Hour of Day", ylabel="Power (kW)")
-
-
+        
+        output = plt.plot(mDict[str(x)])
+        outout = plt.xlabel("Hour of Day")
+        output = plt.ylabel("Power (kW)")
+        return(output)
+        
+    
+    def daily_plot(self):
+        jan = range(1, (24*31) + 1)
+        feb = range(jan[-1], (jan[-1] + 24 * 28) + 1)
+        mar = range(feb[-1], (feb[-1] + 24 * 31) + 1)
+        apr = range(mar[-1], (mar[-1] + 24 * 30) + 1)
+        may = range(apr[-1], (apr[-1] + 24 * 31) + 1)
+        jun = range(may[-1], (may[-1] + 24 * 30) + 1)
+        jul = range(jun[-1], (jun[-1] + 24 * 31) + 1)
+        aug = range(jul[-1], (jul[-1] + 24 * 31) + 1)
+        sep = range(aug[-1], (aug[-1] + 24 * 30) + 1)
+        octb = range(sep[-1], (sep[-1] + 24 * 31) + 1)
+        nov = range(octb[-1], (octb[-1] + 24 * 30) + 1)
+        dec = range(nov[-1], (nov[-1] + 24 * 31) + 1)
+        
+        mDict = {
+        "1": jan,
+        "2": feb,
+        "3": mar,
+        "4": apr,
+        "5": may,
+        "6": jun,
+        "7": jul,
+        "8": aug,
+        "9": sep,
+        "10": octb,
+        "11": nov,
+        "12": dec
+        }
+        
+        response = input("""What months do you want to plot on the same graph? \n Input months by their number (ex: January = 1) \n """)
+        
+        output = plt.plot(self.kWData[mDict[response][0]: mDict[response][-1]]) 
+        outout = plt.xlabel("Hour of Day")
+        output = plt.ylabel("Power (kW)")   
               
         #this gets the average value of the first hour in Jan... need to develop a loop to get all hours
         #self.jan_plot = plt.plot(average(self.kwData["kW"][jan[0]:jan[-1]][0::24]))
         
         
-
-def make_plots(month_profile):
-    output = []
-    for x in range(0,24):
-        output.append(average(month_profile["kW"][x::24]))
-    
-    plt.plot(output)
-    plt.xlabel("Hour of Day")
-    plt.xlabel("Power (kW)")
-    
-
-
-def yearly_view():
-    test = yearly_3D_plot()
-    test.get_kw_data()
-    test.make_plot()
-    test.kwPlot
+#Testing funcitons -- these may be removed
+#def make_plots(month_profile):
+#    output = []
+#    for x in range(0,24):
+#        output.append(average(month_profile["kW"][x::24]))
+#    
+#    plt.plot(output)
+#    plt.xlabel("Hour of Day")
+#    plt.
+#    
+#
+#
+#def yearly_view():
+#    test = yearly_3D_plot()
+#    test.get_kw_data()
+#    test.make_plot()
+#    test.kwPlot
 
 def monthly_avg():
     monthTest = monthly_2D_plots()
     monthTest.get_kw_data()
     monthTest.monthly_analysis_avg_profile()
     #monthTest.combine_monthly_plots()
-    #monthTest.plot
+    monthTest.plot_months(1,2,3)
 
 
 
