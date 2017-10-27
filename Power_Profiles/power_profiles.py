@@ -54,7 +54,7 @@ class yearly_3D_plot:
         ax = p3.Axes3D(self.kwPlot)
         ax.contour3D(X,Y,zData)
         ax.set_xlabel('Day of Year')
-        ax.set_ylabel('Hour of Day')
+        ax.set_ylabel('Hour of Daymonth')
         ax.set_zlabel('kW')
         
 class monthly_2D_plots:
@@ -292,8 +292,8 @@ def monthly_avg():
     monthTest = monthly_2D_plots()
     monthTest.get_kw_data()
     monthTest.monthly_analysis_avg_profile()
-    #monthTest.combine_monthly_plots()
-    monthTest.plot_months(1,2,3)
+    monthTest.combine_monthly_plots()
+  #  monthTest.plot_month([1,2,3])
 
 
 
